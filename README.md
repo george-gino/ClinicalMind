@@ -1,1 +1,1 @@
-# ClinicalMind
+# ClinicalMind AI
