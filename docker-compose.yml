@@ -1,0 +1,56 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  image-agent:
+    build:
+      context: .
+      dockerfile: docker/image-agent/Dockerfile
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+
+  text-agent:
+    build:
+      context: .
+      dockerfile: docker/text-agent/Dockerfile
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+    ports:
+      - "8001:8000"
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+
+  diagnostic-agent:
+    build:
+      context: .
+      dockerfile: docker/diagnostic-agent/Dockerfile
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+    ports:
+      - "8002:8000"
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: docker/api-gateway/Dockerfile
+    volumes:
+      - ./src:/app/src
+    ports:
+      - "8080:8080"
+    environment:
+      - PYTHONPATH=/app
+      - IMAGE_AGENT_URL=http://image-agent:8000
+      - TEXT_AGENT_URL=http://text-agent:8000
+      - DIAGNOSTIC_AGENT_URL=http://diagnostic-agent:8000
